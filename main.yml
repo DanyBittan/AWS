@@ -150,7 +150,7 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
-
+          exec > /tmp/userdata.log 2>&1
           # Actualizar todas las apps
           apt update -y
           # Instalar AWS helper scripts de CloudFormation
@@ -165,15 +165,15 @@ Resources:
             echo "Instalando dependencias Node.JS"
             wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
             . ~/.nvm/nvm.sh
-            . ~/bashrc
+            . ~/.bashrc
 
             #Instalamos node y npm
             nvm install --lts
             curl -sL https://github.com/DanyBittan/Node/archive/main.zip --output main.zip
             sudo apt install unzip
             unzip main.zip
-            cd Node-main 
-            npm i 
+            cd Node-main/Node
+            npm i
             npm start
           EOF
           chown ubuntu:ubuntu /tmp/install_script.sh && chmod a+x /tmp/install_script.sh

@@ -5,7 +5,7 @@ CLI_PROFILE=default
 
 EC2_INSTANCE_TYPE=t2.micro
 
-echo -e "\n=========== Desplegando  main.yml ================="
+echo -e "\n================== Desplegando main.yml ====================="
 
 aws cloudformation deploy \
 	--region $REGION \
