@@ -159,26 +159,16 @@ Resources:
           python3 -m easy_install --script-dir /opt/aws/bin aws-cfn-bootstrap-py3-latest.tar.gz
           ln -s /root/aws-cfn-bootstrap-latest/init/ubuntu/cfn-hup /etc/init.d/cfn-hup
           /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource EC2Instance --configsets full_install --region ${AWS::Region}
-          # Instalar MVN
-          cat > /tmp/install_script.sh << EOF
-            # Start Install
-            echo "Instalando dependencias Node.JS"
-            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-            . ~/.nvm/nvm.sh
-            . ~/.bashrc
-
-            #Instalamos node y npm
-            nvm install --lts
-            curl -sL https://github.com/DanyBittan/Node/archive/main.zip --output main.zip
-            sudo apt install unzip
-            unzip main.zip
-            cd Node-main/Node
-            npm i
-            npm start
-          EOF
           chown ubuntu:ubuntu /tmp/install_script.sh && chmod a+x /tmp/install_script.sh
           sleep 1; su - ubuntu -c "/tmp/install_script.sh"
-          # Esta tiene que serla ultima instrucción
+          # Instalar CodeDeploy
+          sudo apt install ruby-full
+          sudo apt install wget
+          cd /home/ubuntu
+          wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
+          chmod +x ./install
+          sudo ./install auto > /tmp/logfile
+          # Esta tiene que ser la ultima instrucción
           /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource EC2Instance --region ${AWS::Region}
       Tags:
         - Key: Name
